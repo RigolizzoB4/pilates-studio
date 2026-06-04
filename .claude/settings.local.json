@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(graphify)",
+      "Bash([ -f \"$PY\" ])",
+      "Bash(C:/Users/felip/AppData/Roaming/uv/tools/graphifyy/Scripts/python.exe -c 'import graphify; print\\('\\\\''OK'\\\\''\\)')",
+      "Read(//c/Users/felip/AppData/Roaming/uv/tools/**)",
+      "Bash(graphify export *)"
+    ]
+  }
+}

@@ -1,0 +1,167 @@
+{
+  "C:\\Felipe\\Projetos\\pilates-studio\\.claude\\settings.local.json": {
+    "mtime": 1780541134.3919594,
+    "ast_hash": "1bfb8ae1dde77c576aeff7c200cd0b94",
+    "semantic_hash": "1bfb8ae1dde77c576aeff7c200cd0b94"
+  },
+  "C:\\Felipe\\Projetos\\pilates-studio\\.eslintrc.json": {
+    "mtime": 1780539833.7962866,
+    "ast_hash": "f09740d526f714b8a04de7631b2e9c50",
+    "semantic_hash": "f09740d526f714b8a04de7631b2e9c50"
+  },
+  "C:\\Felipe\\Projetos\\pilates-studio\\app\\api\\claude\\route.ts": {
+    "mtime": 1780539833.8004687,
+    "ast_hash": "3179de5d6481e9d5a8a7fb09bd083fa8",
+    "semantic_hash": "3179de5d6481e9d5a8a7fb09bd083fa8"
+  },
+  "C:\\Felipe\\Projetos\\pilates-studio\\app\\api\\telegram\\webhook\\route.ts": {
+    "mtime": 1780539833.8024879,
+    "ast_hash": "56265c5f4ce32c3df3d671b9c25de18e",
+    "semantic_hash": "56265c5f4ce32c3df3d671b9c25de18e"
+  },
+  "C:\\Felipe\\Projetos\\pilates-studio\\app\\api\\telegram\\webhook\\telegram-utils.ts": {
+    "mtime": 1780539833.8024879,
+    "ast_hash": "6cdd56e36c928b25129bef7c70e2496e",
+    "semantic_hash": "6cdd56e36c928b25129bef7c70e2496e"
+  },
+  "C:\\Felipe\\Projetos\\pilates-studio\\app\\components\\PilatesApp.jsx": {
+    "mtime": 1780539833.8050175,
+    "ast_hash": "5e290a226345d25e2306229c806ad476",
+    "semantic_hash": "5e290a226345d25e2306229c806ad476"
+  },
+  "C:\\Felipe\\Projetos\\pilates-studio\\app\\components\\PwaTheme.tsx": {
+    "mtime": 1780539833.8050175,
+    "ast_hash": "ce7bd3e5560663ddc1519a0b4a2235cd",
+    "semantic_hash": "ce7bd3e5560663ddc1519a0b4a2235cd"
+  },
+  "C:\\Felipe\\Projetos\\pilates-studio\\app\\components\\pilates\\AnamnesisTab.jsx": {
+    "mtime": 1780539833.806036,
+    "ast_hash": "15efdf7dbe01ada1dcb2ca2acaa0419f",
+    "semantic_hash": "15efdf7dbe01ada1dcb2ca2acaa0419f"
+  },
+  "C:\\Felipe\\Projetos\\pilates-studio\\app\\components\\pilates\\PostureCameraModals.jsx": {
+    "mtime": 1780539833.8070333,
+    "ast_hash": "e02a77c45c1df05e0ae87b0c921bc0a2",
+    "semantic_hash": "e02a77c45c1df05e0ae87b0c921bc0a2"
+  },
+  "C:\\Felipe\\Projetos\\pilates-studio\\app\\components\\pilates\\PostureTab.jsx": {
+    "mtime": 1780539833.8080225,
+    "ast_hash": "4adb0441198324f201d72d8aea2d514d",
+    "semantic_hash": "4adb0441198324f201d72d8aea2d514d"
+  },
+  "C:\\Felipe\\Projetos\\pilates-studio\\app\\components\\pilates\\ReportsView.jsx": {
+    "mtime": 1780539833.809023,
+    "ast_hash": "db9ba1a306c409d93c1b3df3e0ee777a",
+    "semantic_hash": "db9ba1a306c409d93c1b3df3e0ee777a"
+  },
+  "C:\\Felipe\\Projetos\\pilates-studio\\app\\components\\pilates\\posture-camera-utils.js": {
+    "mtime": 1780539833.8101583,
+    "ast_hash": "39837ff8f66b287822fbac12a37a7a9d",
+    "semantic_hash": "39837ff8f66b287822fbac12a37a7a9d"
+  },
+  "C:\\Felipe\\Projetos\\pilates-studio\\app\\components\\pilates\\primitives.jsx": {
+    "mtime": 1780539833.8101583,
+    "ast_hash": "426b5e2017acffae3a9bc9b0715b8a5b",
+    "semantic_hash": "426b5e2017acffae3a9bc9b0715b8a5b"
+  },
+  "C:\\Felipe\\Projetos\\pilates-studio\\app\\components\\pilates\\theme.js": {
+    "mtime": 1780539833.8110223,
+    "ast_hash": "da1e93ac67ca242f2a9e233cadc3eeab",
+    "semantic_hash": "da1e93ac67ca242f2a9e233cadc3eeab"
+  },
+  "C:\\Felipe\\Projetos\\pilates-studio\\app\\layout.tsx": {
+    "mtime": 1780539833.815024,
+    "ast_hash": "07fe72daf00ac188522aa0ec32e27918",
+    "semantic_hash": "07fe72daf00ac188522aa0ec32e27918"
+  },
+  "C:\\Felipe\\Projetos\\pilates-studio\\app\\page.tsx": {
+    "mtime": 1780539833.8160229,
+    "ast_hash": "a730665dcc7ff3406b228e185c9fa5cb",
+    "semantic_hash": "a730665dcc7ff3406b228e185c9fa5cb"
+  },
+  "C:\\Felipe\\Projetos\\pilates-studio\\lib\\finance-helpers.ts": {
+    "mtime": 1780539833.817024,
+    "ast_hash": "d149c8271e333f2195f8073f1220a236",
+    "semantic_hash": "d149c8271e333f2195f8073f1220a236"
+  },
+  "C:\\Felipe\\Projetos\\pilates-studio\\lib\\patient-export-html.ts": {
+    "mtime": 1780539833.817024,
+    "ast_hash": "f390669a27a9452cedcbc6970544f923",
+    "semantic_hash": "f390669a27a9452cedcbc6970544f923"
+  },
+  "C:\\Felipe\\Projetos\\pilates-studio\\lib\\pilates-claude.js": {
+    "mtime": 1780539833.8180263,
+    "ast_hash": "e45113d7df8900e706314e4d0bcff99a",
+    "semantic_hash": "e45113d7df8900e706314e4d0bcff99a"
+  },
+  "C:\\Felipe\\Projetos\\pilates-studio\\lib\\pilates-utils.js": {
+    "mtime": 1780539833.8191583,
+    "ast_hash": "2ca6eddeb14d2a375fa54b7c6e5a75ba",
+    "semantic_hash": "2ca6eddeb14d2a375fa54b7c6e5a75ba"
+  },
+  "C:\\Felipe\\Projetos\\pilates-studio\\lib\\studio-server.ts": {
+    "mtime": 1780539833.8191583,
+    "ast_hash": "f29c7c716677593ff1f10a4c8b7cec88",
+    "semantic_hash": "f29c7c716677593ff1f10a4c8b7cec88"
+  },
+  "C:\\Felipe\\Projetos\\pilates-studio\\lib\\supabase.ts": {
+    "mtime": 1780539833.8207586,
+    "ast_hash": "47f14da3ac4aaaf0ffd9990f208e8874",
+    "semantic_hash": "47f14da3ac4aaaf0ffd9990f208e8874"
+  },
+  "C:\\Felipe\\Projetos\\pilates-studio\\lib\\telegram-pending.ts": {
+    "mtime": 1780539833.8212626,
+    "ast_hash": "786dcd127f56485e70a9282f203748cd",
+    "semantic_hash": "786dcd127f56485e70a9282f203748cd"
+  },
+  "C:\\Felipe\\Projetos\\pilates-studio\\next.config.js": {
+    "mtime": 1780539833.8212626,
+    "ast_hash": "af8539c61a69422eab5a4a2831bb5638",
+    "semantic_hash": "af8539c61a69422eab5a4a2831bb5638"
+  },
+  "C:\\Felipe\\Projetos\\pilates-studio\\package.json": {
+    "mtime": 1780539833.8242688,
+    "ast_hash": "11e5179742c2ff16ead3ca5ce67de800",
+    "semantic_hash": "11e5179742c2ff16ead3ca5ce67de800"
+  },
+  "C:\\Felipe\\Projetos\\pilates-studio\\postcss.config.mjs": {
+    "mtime": 1780539833.8252704,
+    "ast_hash": "3507368dae6e94b0070b0a10efa15a05",
+    "semantic_hash": "3507368dae6e94b0070b0a10efa15a05"
+  },
+  "C:\\Felipe\\Projetos\\pilates-studio\\public\\manifest.json": {
+    "mtime": 1780539833.8252704,
+    "ast_hash": "97d554fc88d44c5a2b0ff7e64857c67a",
+    "semantic_hash": "97d554fc88d44c5a2b0ff7e64857c67a"
+  },
+  "C:\\Felipe\\Projetos\\pilates-studio\\public\\sw.js": {
+    "mtime": 1780539833.82627,
+    "ast_hash": "1324eed0dc35d2c6a3c0ab87304f0763",
+    "semantic_hash": "1324eed0dc35d2c6a3c0ab87304f0763"
+  },
+  "C:\\Felipe\\Projetos\\pilates-studio\\public\\swe-worker-5c72df51bb1f6ee0.js": {
+    "mtime": 1780539833.827268,
+    "ast_hash": "5a47d90db13bb1309b25bdf7b363570e",
+    "semantic_hash": "5a47d90db13bb1309b25bdf7b363570e"
+  },
+  "C:\\Felipe\\Projetos\\pilates-studio\\public\\workbox-4754cb34.js": {
+    "mtime": 1780539833.8287325,
+    "ast_hash": "e3156c7afff103a282810e9ba436d119",
+    "semantic_hash": "e3156c7afff103a282810e9ba436d119"
+  },
+  "C:\\Felipe\\Projetos\\pilates-studio\\tailwind.config.ts": {
+    "mtime": 1780539833.8287325,
+    "ast_hash": "cd90c4e2838087a2001d0ae83bf15958",
+    "semantic_hash": "cd90c4e2838087a2001d0ae83bf15958"
+  },
+  "C:\\Felipe\\Projetos\\pilates-studio\\tsconfig.json": {
+    "mtime": 1780539833.8301663,
+    "ast_hash": "9862fd3101abbce4fec2ce61dc1137e5",
+    "semantic_hash": "9862fd3101abbce4fec2ce61dc1137e5"
+  },
+  "C:\\Felipe\\Projetos\\pilates-studio\\README.md": {
+    "mtime": 1780539833.797572,
+    "ast_hash": "9162add00befbcdb432430f405c4ad8d",
+    "semantic_hash": "9162add00befbcdb432430f405c4ad8d"
+  }
+}

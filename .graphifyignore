@@ -1,0 +1,14 @@
+node_modules/
+.next/
+out/
+package-lock.json
+*.woff
+*.ico
+.env
+.env.*
+*.sqlite
+*.db
+graphify-out/
+public/sw.js
+public/workbox-*.js
+public/swe-worker-*.js
