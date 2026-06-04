@@ -7,3 +7,10 @@ Rules:
 - If graphify-out/wiki/index.md exists, use it for broad navigation instead of raw source browsing.
 - Read graphify-out/GRAPH_REPORT.md only for broad architecture review or when query/path/explain do not surface enough context.
 - After modifying code, run `graphify update .` to keep the graph current (AST-only, no API cost).
+
+## Build e deploy
+- NÃO rode npm install, npm run build nem npm run dev local.
+- O ambiente local tem SSL corporativo que trava o npm.
+- Fluxo: extrair/editar → git commit → git push.
+- A Vercel valida o build automaticamente a cada push. Ela é o juiz do build.
+- Para verificar se passou, olhar o deploy na Vercel, não buildar local.
