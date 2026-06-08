@@ -42,6 +42,13 @@ export default function InfoTab({ patient, updatePatient }) {
         <Btn variant="secondary" onClick={() => openPatientFullExportHtml(f)}>
           Exportar ficha PDF
         </Btn>
+        <Btn variant="ghost" onClick={() => {
+          if (typeof window !== "undefined" && window.confirm(`Excluir ${patient.name}? Ele some da lista mas pode ser recuperado.`)) {
+            updatePatient({ ...patient, deleted: true, updatedAt: new Date().toISOString() });
+          }
+        }}>
+          Excluir paciente
+        </Btn>
       </div>
     </div>
   );
