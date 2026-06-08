@@ -10,7 +10,7 @@ import {
   useMemo,
   memo,
 } from "react";
-import { saveDB, loadDB, subscribeDB } from "@/lib/supabase";
+import { saveDB, loadDB, subscribeDB, mergeDB } from "@/lib/supabase";
 import { isOverdue30Days, getMonthlyRevenueLast6Months } from "@/lib/finance-helpers";
 import { setPilatesTheme, setPilatesFontScale } from "@/app/components/PwaTheme";
 import { uid, fmtCurrency, daysUntilBirthday, toISO, fmtDate, fmtMonth } from "@/lib/pilates-utils";
@@ -1483,9 +1483,16 @@ export default function PilatesApp() {
   }, [showToast]);
 
   const savePatients = async (pts) => {
-    setPatients(pts);
-    writeCache("pilates_patients", pts);
-    await pushToCloud("pilates_patients", pts, "Pacientes atualizados.");
+    try {
+      const merged = await mergeDB("pilates_patients", pts);
+      setPatients(merged);
+      writeCache("pilates_patients", merged);
+      await pushToCloud("pilates_patients", merged, "Pacientes atualizados.");
+    } catch {
+      setPatients(pts);
+      writeCache("pilates_patients", pts);
+      await pushToCloud("pilates_patients", pts, "Pacientes atualizados.");
+    }
   };
   const saveAppointments = async (apts) => {
     setAppointments(apts);
