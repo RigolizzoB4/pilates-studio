@@ -1331,15 +1331,17 @@ export default function PilatesApp() {
     setFontScale(parseFloat(localStorage.getItem("pilates_font_scale") || "1") || 1);
   }, []);
 
+  const visiblePatients = useMemo(() => patients.filter((p) => !p.deleted), [patients]);
+
   const overdueNames = useMemo(
-    () => patients.filter((p) => isOverdue30Days(p)).map((p) => p.name),
-    [patients]
+    () => visiblePatients.filter((p) => isOverdue30Days(p)).map((p) => p.name),
+    [visiblePatients]
   );
 
   const searchResults = useMemo(() => {
     const q = searchQ.trim().toLowerCase();
     if (!q) return { patients: [], appointments: [] };
-    const pMatch = patients.filter(
+    const pMatch = visiblePatients.filter(
       (p) =>
         p.name?.toLowerCase().includes(q) ||
         p.phone?.includes(q) ||
@@ -1347,12 +1349,12 @@ export default function PilatesApp() {
     );
     const aMatch = appointments.filter((a) => {
       const ds = (a.date || "").toLowerCase();
-      const pt = patients.find((x) => x.id === a.patientId);
+      const pt = visiblePatients.find((x) => x.id === a.patientId);
       const pn = pt?.name?.toLowerCase() || "";
       return ds.includes(q) || pn.includes(q) || String(a.startHour).includes(q);
     });
     return { patients: pMatch.slice(0, 12), appointments: aMatch.slice(0, 12) };
-  }, [searchQ, patients, appointments]);
+  }, [searchQ, visiblePatients, appointments]);
 
   const pushToCloud = useCallback(
     async (key, val, okMsg) => {
@@ -1687,7 +1689,7 @@ export default function PilatesApp() {
         {view === "calendar" && (
           <CalendarView
             appointments={appointments}
-            patients={patients}
+            patients={visiblePatients}
             currentDate={currentDate}
             setCurrentDate={setCurrentDate}
             onSlotClick={(date, hour) => setModal({ type: "add-appointment", date, hour })}
@@ -1700,7 +1702,7 @@ export default function PilatesApp() {
         )}
         {view === "patients" && (
           <PatientsView
-            patients={patients}
+            patients={visiblePatients}
             onSelect={(p) => {
               setSelectedPatient(p);
               setView("patient");
@@ -1716,16 +1718,16 @@ export default function PilatesApp() {
             onBack={() => navTo("patients")}
           />
         )}
-        {view === "financial" && <FinancialView patients={patients} appointments={appointments} />}
-        {view === "costs" && <CostsView costs={costs} setCosts={setCosts} patients={patients} />}
-        {view === "reports" && <ReportsView patients={patients} appointments={appointments} costs={costs} />}
+        {view === "financial" && <FinancialView patients={visiblePatients} appointments={appointments} />}
+        {view === "costs" && <CostsView costs={costs} setCosts={setCosts} patients={visiblePatients} />}
+        {view === "reports" && <ReportsView patients={visiblePatients} appointments={appointments} costs={costs} />}
         {view === "reminders" && <RemindersView reminders={reminders} setReminders={setReminders} />}
       </div>
 
       {modal && (
         <Modal
           modal={modal}
-          patients={patients}
+          patients={visiblePatients}
           appointments={appointments}
           onClose={() => setModal(null)}
           savePatients={savePatients}
@@ -1817,7 +1819,7 @@ export default function PilatesApp() {
                 <p style={{ fontSize: 11, fontWeight: 700, color: B.muted, margin: "12px 0 8px" }}>AGENDA</p>
               )}
               {searchResults.appointments.map((a) => {
-                const pt = patients.find((x) => x.id === a.patientId);
+                const pt = visiblePatients.find((x) => x.id === a.patientId);
                 return (
                   <button
                     key={a.id}
