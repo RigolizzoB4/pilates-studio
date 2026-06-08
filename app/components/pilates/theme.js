@@ -46,12 +46,12 @@ export const APT_TYPES = {
 };
 
 export const APT_STATUS = {
-  confirmed: { label: "Confirmada", color: B.green },
-  cancelled_notice: { label: "Cancelou c/ aviso", color: B.amber },
-  cancelled_no_notice: { label: "Cancelou sem aviso", color: B.red },
-  missed: { label: "Faltou", color: B.gray },
-  needs_scheduling: { label: "Precisa agendar", color: B.teal },
-  pending_payment: { label: "Pagamento pendente", color: B.purple },
+  confirmed: { label: "Confirmada", color: "#3d9e72" },
+  cancelled_notice: { label: "Cancelou c/ aviso", color: "#c47c22" },
+  cancelled_no_notice: { label: "Cancelou sem aviso", color: "#8a7a94" },
+  missed: { label: "Faltou", color: "#7a8898" },
+  needs_scheduling: { label: "Precisa agendar", color: "#3a9ea6" },
+  pending_payment: { label: "Pagamento pendente", color: "#8c62d4" },
 };
 
 export const PAY_TYPES = {

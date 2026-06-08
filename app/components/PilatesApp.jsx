@@ -535,7 +535,7 @@ const CalendarView = memo(({ appointments, patients, currentDate, setCurrentDate
         <div style={{ display: "grid", gridTemplateColumns: "56px repeat(6,1fr)", minWidth: 640 }}>
           {HOURS.map((hour) => (
             <Fragment key={hour}>
-              <div style={{ height: CELL_H, borderBottom: `1px solid ${B.borderLt}`, display: "flex", alignItems: "flex-start", justifyContent: "flex-end", paddingRight: 8, paddingTop: 6, background: B.creamMd }}>
+              <div style={{ height: CELL_H, borderBottom: `1px solid ${B.border}`, display: "flex", alignItems: "flex-start", justifyContent: "flex-end", paddingRight: 8, paddingTop: 6, background: B.creamMd }}>
                 <span style={{ fontSize: 11, color: B.mutedLt, fontWeight: 500 }}>{hour}:00</span>
               </div>
               {weekDates.map((d, di) => {
@@ -551,7 +551,7 @@ const CalendarView = memo(({ appointments, patients, currentDate, setCurrentDate
                       const id = e.dataTransfer.getData("application/x-apt-id");
                       if (id && onMoveAppointment) onMoveAppointment(id, dateStr, hour);
                     }}
-                    style={{ height: CELL_H, borderBottom: `1px solid ${B.borderLt}`, borderLeft: `1px solid ${B.borderLt}`, position: "relative", cursor: "pointer" }}
+                    style={{ height: CELL_H, borderBottom: `1px solid ${B.border}`, borderLeft: `1px solid ${B.border}`, position: "relative", cursor: "pointer" }}
                     onMouseEnter={(e) => (e.currentTarget.style.background = B.pinkFaint)}
                     onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
                   >

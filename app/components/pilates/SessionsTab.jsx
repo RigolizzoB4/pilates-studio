@@ -76,7 +76,7 @@ export default function SessionsTab({ patient, appointments, updatePatient }) {
               <Tag color={APT_TYPES[a.type]?.color||B.teal}>{APT_TYPES[a.type]?.label||'Sessão'}</Tag>
               {a.status&&<Tag color={APT_STATUS[a.status]?.color||B.green}>{APT_STATUS[a.status]?.label}</Tag>}
               {a.cancelledWithNotice!==undefined&&(
-                <Tag color={a.cancelledWithNotice?B.amber:B.red}>{a.cancelledWithNotice?'c/ aviso':'sem aviso'}</Tag>
+                <Tag color={a.cancelledWithNotice?"#c47c22":"#8a7a94"}>{a.cancelledWithNotice?'c/ aviso':'sem aviso'}</Tag>
               )}
               <span style={{fontSize:11,color:B.muted}}>{a.startHour}h</span>
             </div>
