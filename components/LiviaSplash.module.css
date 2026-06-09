@@ -1,0 +1,199 @@
+:root {
+  --livia-green-main: #63783F;
+  --livia-green-mid: #7FA552;
+  --livia-green-soft: #99CE85;
+  --livia-bg: #ffffff;
+}
+
+.stage {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: var(--livia-bg);
+  cursor: pointer;
+  opacity: 1;
+  transition: opacity 1000ms ease;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.leaving {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.card {
+  position: relative;
+  width: min(100vw, calc(100dvh * 0.625));
+  height: min(100dvh, calc(100vw * 1.6));
+  max-width: 1600px;
+  max-height: 2560px;
+  overflow: visible;
+  background: #ffffff;
+  transform-origin: center center;
+}
+
+.figure {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  pointer-events: none;
+  backface-visibility: hidden;
+}
+
+.composition {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transform: scale(1.035);
+  transform-origin: center 46%;
+  animation: liviaBreathReveal 3.2s 0.2s cubic-bezier(.22,.65,.2,1) forwards;
+}
+
+.logo {
+  position: absolute;
+  left: 50%;
+  top: 26%;
+  width: clamp(315px, 76vw, 848px);
+  max-width: 124%;
+  height: auto;
+  display: block;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  filter: drop-shadow(0 1px 1px rgba(25, 36, 20, 0.08));
+  animation: liviaLogoBreath 7s 3.6s ease-in-out infinite alternate;
+}
+
+.loader {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 43%;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(8px, 1.1vw, 11px);
+  opacity: 0;
+  animation: liviaLoaderIn 1s 3s ease forwards;
+}
+
+.dots {
+  display: flex;
+  gap: clamp(10px, 1.5vw, 14px);
+}
+
+.dots span {
+  width: clamp(9px, 1.4vw, 13px);
+  height: clamp(9px, 1.4vw, 13px);
+  display: block;
+  border-radius: 999px;
+  animation: liviaDotBob 1.4s ease-in-out infinite;
+}
+
+.dots span:nth-child(1) {
+  background: var(--livia-green-main);
+  animation-delay: 0s;
+}
+
+.dots span:nth-child(2) {
+  background: var(--livia-green-mid);
+  animation-delay: 0.2s;
+}
+
+.dots span:nth-child(3) {
+  background: var(--livia-green-soft);
+  animation-delay: 0.4s;
+}
+
+.word {
+  color: var(--livia-green-main);
+  font-size: clamp(13px, 2.2vw, 24px);
+  font-weight: 500;
+  letter-spacing: 0.26em;
+  text-indent: 0.26em;
+  text-transform: uppercase;
+}
+
+@keyframes liviaBreathReveal {
+  0% {
+    opacity: 0;
+    transform: scale(1.035);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes liviaLogoBreath {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.012);
+  }
+}
+
+@keyframes liviaLoaderIn {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes liviaDotBob {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  40% {
+    transform: translateY(-8px);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 640px) {
+  .card {
+    width: min(100vw, calc(100dvh * 0.625));
+    height: min(100dvh, calc(100vw * 1.6));
+  }
+
+  .logo {
+    top: 26%;
+    width: min(91vw, 626px);
+    max-width: 115%;
+  }
+
+  .loader {
+    top: 43%;
+  }
+}
+
+@media (orientation: landscape) and (min-width: 900px) {
+  .card {
+    height: 100dvh;
+    width: calc(100dvh * 0.625);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .composition,
+  .logo,
+  .loader,
+  .dots span {
+    animation: none;
+  }
+
+  .composition,
+  .loader {
+    opacity: 1;
+    transform: none;
+  }
+}

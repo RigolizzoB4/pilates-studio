@@ -47,9 +47,9 @@ export function openPatientFullExportHtml(patient: Record<string, unknown>, stud
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
     body{font-family:system-ui,-apple-system,sans-serif;background:#fff;color:#1A1A2E;padding:32px;max-width:800px;margin:0 auto;line-height:1.5}
-    .head{display:flex;align-items:center;gap:16px;margin-bottom:28px;padding-bottom:20px;border-bottom:3px solid #C8175B}
-    .logo{width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,#C8175B,#00A0A8);display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:800;color:#fff}
-    h1{font-size:22px} h2{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#00A0A8;margin:24px 0 12px;border-bottom:1px solid #E5E7EB;padding-bottom:6px}
+    .head{display:flex;align-items:center;gap:16px;margin-bottom:28px;padding-bottom:20px;border-bottom:3px solid #63783F}
+    .logo{width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,#63783F,#7FA552);display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:800;color:#fff}
+    h1{font-size:22px} h2{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#7FA552;margin:24px 0 12px;border-bottom:1px solid #E5E7EB;padding-bottom:6px}
     table{width:100%;border-collapse:collapse}
     .footer{margin-top:40px;text-align:center;font-size:11px;color:#9CA3AF;border-top:1px dashed #E5E7EB;padding-top:16px}
     @media print{body{padding:16px}}

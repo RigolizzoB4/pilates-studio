@@ -30,13 +30,13 @@ const calcAngle=(p1,p2,p3)=>{
 };
 
 const generatePosturePDF=(patient,analysis,angles,imgData,date)=>{
-  const angleRows=angles.map(a=>`<tr><td style="padding:6px 10px;border-bottom:1px solid #eee;font-size:13px;color:#555">${a.label}</td><td style="padding:6px 10px;border-bottom:1px solid #eee;font-size:13px;font-weight:700;color:#C8175B;text-align:right">${a.value}°</td></tr>`).join('');
+  const angleRows=angles.map(a=>`<tr><td style="padding:6px 10px;border-bottom:1px solid #eee;font-size:13px;color:#555">${a.label}</td><td style="padding:6px 10px;border-bottom:1px solid #eee;font-size:13px;font-weight:700;color:#63783F;text-align:right">${a.value}°</td></tr>`).join('');
   const html=`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Avaliação Postural — ${patient.name}</title>
   <style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial,sans-serif;background:#fff;color:#1A1A2E;padding:32px;max-width:700px;margin:0 auto}
-  .header{display:flex;align-items:center;gap:16px;margin-bottom:24px;padding-bottom:20px;border-bottom:2px solid #C8175B}
-  .logo{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,#C8175B,#00A0A8);display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:700;color:#fff;flex-shrink:0}
+  .header{display:flex;align-items:center;gap:16px;margin-bottom:24px;padding-bottom:20px;border-bottom:2px solid #63783F}
+  .logo{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,#63783F,#7FA552);display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:700;color:#fff;flex-shrink:0}
   h1{font-size:20px;font-weight:700;color:#1A1A2E}h2{font-size:14px;color:#6B7280;margin-top:3px}
-  .section{margin-bottom:22px}.section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#00A0A8;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid #E5E7EB}
+  .section{margin-bottom:22px}.section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#7FA552;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid #E5E7EB}
   .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
   .info-item{background:#F9FAFB;border-radius:8px;padding:10px 14px}.info-label{font-size:11px;color:#9CA3AF;margin-bottom:3px}.info-val{font-size:14px;font-weight:600;color:#1A1A2E}
   .photo-section{display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap}

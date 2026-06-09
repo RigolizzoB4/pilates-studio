@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#C8175B",
+  themeColor: "#63783F",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
@@ -36,14 +36,14 @@ export default function RootLayout({
           href="/icons/icon-512.png"
           media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)"
         />
-        <meta name="theme-color" content="#C8175B" />
+        <meta name="theme-color" content="#63783F" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="apple-mobile-web-app-title" content="Studio Pilates" />
         <meta name="format-detection" content="telephone=no" />
       </head>
-      <body style={{ margin: 0, padding: 0, overflow: "hidden", backgroundColor: "#FAF8F6" }}>
+      <body style={{ margin: 0, padding: 0, overflow: "hidden", backgroundColor: "#F3F6EC" }}>
         <PwaTheme />
         {children}
       </body>

@@ -113,16 +113,16 @@ const generateReceipt = (patient, sessionDate, amount, sessionNum, studioName = 
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
     *{box-sizing:border-box;margin:0;padding:0}
     body{font-family:Inter,sans-serif;background:#fff;padding:40px;max-width:480px;margin:0 auto;color:#1A1A2E}
-    .logo{width:60px;height:60px;border-radius:16px;background:linear-gradient(135deg,#C8175B,#00A0A8);display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;color:#fff;margin-bottom:16px}
+    .logo{width:60px;height:60px;border-radius:16px;background:linear-gradient(135deg,#63783F,#7FA552);display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;color:#fff;margin-bottom:16px}
     h1{font-size:22px;font-weight:600;color:#1A1A2E;margin-bottom:4px}
     .sub{font-size:13px;color:#6B7280;margin-bottom:32px}
     .divider{border:none;border-top:1.5px solid #E5E7EB;margin:20px 0}
     .row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;font-size:14px}
     .row .lbl{color:#6B7280}
     .row .val{font-weight:500;color:#1A1A2E}
-    .total{background:#FDF0F6;border:1.5px solid #F5D6E6;border-radius:12px;padding:16px 20px;margin-top:20px;display:flex;justify-content:space-between;align-items:center}
-    .total .lbl{font-size:14px;color:#9E1048;font-weight:500}
-    .total .val{font-size:24px;font-weight:700;color:#C8175B}
+    .total{background:#EAF2E1;border:1.5px solid #C7D6B1;border-radius:12px;padding:16px 20px;margin-top:20px;display:flex;justify-content:space-between;align-items:center}
+    .total .lbl{font-size:14px;color:#4E5E31;font-weight:500}
+    .total .val{font-size:24px;font-weight:700;color:#63783F}
     .footer{margin-top:40px;text-align:center;font-size:12px;color:#9CA3AF;border-top:1px dashed #E5E7EB;padding-top:20px}
     @media print{body{padding:20px}.footer{position:fixed;bottom:20px;width:100%}}
   </style></head><body>
