@@ -31,6 +31,13 @@ export const loadDB = async <T>(key: string, def: T): Promise<T> => {
   }
 }
 
+// ─── Merge-by-id (never deletes existing ids) ───
+export async function mergeDB(key: string, incoming: unknown[]): Promise<unknown[]> {
+  const { data, error } = await supabase.rpc('merge_collection', { p_key: key, incoming })
+  if (error) throw error
+  return (data as unknown[]) ?? []
+}
+
 // ─── Real-time subscription helper ───
 export const subscribeDB = (
   key: string,

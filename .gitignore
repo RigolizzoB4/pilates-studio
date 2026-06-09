@@ -34,3 +34,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+graphify-out/
+
+# Ferramentas e build locais
+.claude/
+*.lock

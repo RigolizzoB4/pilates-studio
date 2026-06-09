@@ -74,10 +74,10 @@ const ReportsView = memo(({ patients, appointments, costs }) => {
         <div style={{ background: B.white, border: `1px solid ${B.border}`, borderRadius: 14, padding: 18 }}>
           <h3 style={{ fontSize: 14, fontWeight: 700, color: B.dark, marginBottom: 14 }}>Frequência do Mês</h3>
           {[
-            { label: "Realizadas", v: sessionsMonth, c: B.green },
-            { label: "Canceladas c/ aviso", v: cancelledNotice, c: B.amber },
-            { label: "Canceladas sem aviso", v: cancelledNoNotice, c: B.red },
-            { label: "Faltas sem avisar", v: missed, c: B.gray },
+            { label: "Realizadas", v: sessionsMonth, c: "#3d9e72" },
+            { label: "Canceladas c/ aviso", v: cancelledNotice, c: "#c47c22" },
+            { label: "Canceladas sem aviso", v: cancelledNoNotice, c: "#8a7a94" },
+            { label: "Faltas sem avisar", v: missed, c: "#7a8898" },
           ].map(({ label, v, c }) => (
             <div key={label} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
               <div style={{ width: 8, height: 8, borderRadius: "50%", background: c, flexShrink: 0 }} />

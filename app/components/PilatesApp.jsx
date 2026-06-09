@@ -10,12 +10,10 @@ import {
   useMemo,
   memo,
 } from "react";
-import { saveDB, loadDB, subscribeDB } from "@/lib/supabase";
+import { saveDB, loadDB, subscribeDB, mergeDB } from "@/lib/supabase";
 import { isOverdue30Days, getMonthlyRevenueLast6Months } from "@/lib/finance-helpers";
-import { openPatientFullExportHtml } from "@/lib/patient-export-html";
 import { setPilatesTheme, setPilatesFontScale } from "@/app/components/PwaTheme";
-import { claudeAPI } from "@/lib/pilates-claude";
-import { uid, fmtCurrency, daysUntilBirthday } from "@/lib/pilates-utils";
+import { uid, fmtCurrency, daysUntilBirthday, toISO, fmtDate, fmtMonth } from "@/lib/pilates-utils";
 import {
   B,
   HOURS,
@@ -23,8 +21,6 @@ import {
   WEEK_DAYS,
   APT_TYPES,
   APT_STATUS,
-  PAY_TYPES,
-  PAY_METHODS,
   SESSION_PRICE,
   PATIENT_STATUS,
   DEFAULT_COSTS,
@@ -46,6 +42,26 @@ const AnamnesisTab = dynamic(() => import("@/app/components/pilates/AnamnesisTab
   ssr: false,
   loading: () => <div style={{ padding: 22, color: "var(--pilates-muted)" }}>Carregando…</div>,
 });
+const InfoTab = dynamic(() => import("@/app/components/pilates/InfoTab"), {
+  ssr: false,
+  loading: () => <div style={{ padding: 22, color: "var(--pilates-muted)" }}>Carregando…</div>,
+});
+const EvaluationTab = dynamic(() => import("@/app/components/pilates/EvaluationTab"), {
+  ssr: false,
+  loading: () => <div style={{ padding: 22, color: "var(--pilates-muted)" }}>Carregando…</div>,
+});
+const ChatTab = dynamic(() => import("@/app/components/pilates/ChatTab"), {
+  ssr: false,
+  loading: () => <div style={{ padding: 22, color: "var(--pilates-muted)" }}>Carregando…</div>,
+});
+const FinancialTab = dynamic(() => import("@/app/components/pilates/FinancialTab"), {
+  ssr: false,
+  loading: () => <div style={{ padding: 22, color: "var(--pilates-muted)" }}>Carregando…</div>,
+});
+const SessionsTab = dynamic(() => import("@/app/components/pilates/SessionsTab"), {
+  ssr: false,
+  loading: () => <div style={{ padding: 22, color: "var(--pilates-muted)" }}>Carregando…</div>,
+});
 const PostureTab = dynamic(() => import("@/app/components/pilates/PostureTab"), {
   ssr: false,
   loading: () => <div style={{ padding: 22, color: "var(--pilates-muted)" }}>Carregando…</div>,
@@ -58,11 +74,6 @@ const ReportsView = dynamic(() => import("@/app/components/pilates/ReportsView")
 // ═══════════════════════════════════════════════════════
 // UTILITIES
 // ═══════════════════════════════════════════════════════
-const toISO = (d) => d.toISOString().split("T")[0];
-const fmtDate = (d) => new Date(d).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric" });
-const fmtMonth = (d) => new Date(d).toLocaleDateString("pt-BR", { month: "long", year: "numeric" });
-const today = () => toISO(new Date());
-
 const LS_KEY = (k) => `pilates_studio_v1_${k}`;
 const readCache = (key, def) => {
   if (typeof window === "undefined") return def;
@@ -105,45 +116,6 @@ const isBirthdayToday = (bd) => {
   return b.getMonth() === t.getMonth() && b.getDate() === t.getDate();
 };
 const isBirthdayWeek = (bd) => daysUntilBirthday(bd) <= 7;
-
-const generateReceipt = (patient, sessionDate, amount, sessionNum, studioName = "Studio Pilates") => {
-  const html = `<!DOCTYPE html><html><head><meta charset="utf-8">
-  <title>Recibo — ${patient.name}</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:Inter,sans-serif;background:#fff;padding:40px;max-width:480px;margin:0 auto;color:#1A1A2E}
-    .logo{width:60px;height:60px;border-radius:16px;background:linear-gradient(135deg,#63783F,#7FA552);display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;color:#fff;margin-bottom:16px}
-    h1{font-size:22px;font-weight:600;color:#1A1A2E;margin-bottom:4px}
-    .sub{font-size:13px;color:#6B7280;margin-bottom:32px}
-    .divider{border:none;border-top:1.5px solid #E5E7EB;margin:20px 0}
-    .row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;font-size:14px}
-    .row .lbl{color:#6B7280}
-    .row .val{font-weight:500;color:#1A1A2E}
-    .total{background:#EAF2E1;border:1.5px solid #C7D6B1;border-radius:12px;padding:16px 20px;margin-top:20px;display:flex;justify-content:space-between;align-items:center}
-    .total .lbl{font-size:14px;color:#4E5E31;font-weight:500}
-    .total .val{font-size:24px;font-weight:700;color:#63783F}
-    .footer{margin-top:40px;text-align:center;font-size:12px;color:#9CA3AF;border-top:1px dashed #E5E7EB;padding-top:20px}
-    @media print{body{padding:20px}.footer{position:fixed;bottom:20px;width:100%}}
-  </style></head><body>
-  <div class="logo">P</div>
-  <h1>${studioName}</h1>
-  <div class="sub">RECIBO DE SERVIÇO</div>
-  <hr class="divider">
-  <div class="row"><span class="lbl">Aluna</span><span class="val">${patient.name}</span></div>
-  <div class="row"><span class="lbl">Serviço</span><span class="val">Sessão de Pilates</span></div>
-  <div class="row"><span class="lbl">Data</span><span class="val">${fmtDate(sessionDate + "T12:00:00")}</span></div>
-  ${sessionNum ? `<div class="row"><span class="lbl">Sessão nº</span><span class="val">${sessionNum}</span></div>` : ""}
-  <div class="row"><span class="lbl">Forma de pagamento</span><span class="val">Pix / Transferência</span></div>
-  <hr class="divider">
-  <div class="total"><span class="lbl">Total</span><span class="val">R$ ${(amount || SESSION_PRICE).toFixed(2).replace(".", ",")}</span></div>
-  <div class="footer">Obrigada pela confiança! ♥<br>${studioName} — ${new Date().getFullYear()}</div>
-  <script>window.onload=()=>{window.print();}</script>
-  </body></html>`;
-  const w = window.open("", "_blank", "width=520,height=700");
-  w.document.write(html);
-  w.document.close();
-};
 
 // ═══════════════════════════════════════════════════════
 // SIDEBAR
@@ -563,7 +535,7 @@ const CalendarView = memo(({ appointments, patients, currentDate, setCurrentDate
         <div style={{ display: "grid", gridTemplateColumns: "56px repeat(6,1fr)", minWidth: 640 }}>
           {HOURS.map((hour) => (
             <Fragment key={hour}>
-              <div style={{ height: CELL_H, borderBottom: `1px solid ${B.borderLt}`, display: "flex", alignItems: "flex-start", justifyContent: "flex-end", paddingRight: 8, paddingTop: 6, background: B.creamMd }}>
+              <div style={{ height: CELL_H, borderBottom: `1px solid ${B.border}`, display: "flex", alignItems: "flex-start", justifyContent: "flex-end", paddingRight: 8, paddingTop: 6, background: B.creamMd }}>
                 <span style={{ fontSize: 11, color: B.mutedLt, fontWeight: 500 }}>{hour}:00</span>
               </div>
               {weekDates.map((d, di) => {
@@ -579,7 +551,7 @@ const CalendarView = memo(({ appointments, patients, currentDate, setCurrentDate
                       const id = e.dataTransfer.getData("application/x-apt-id");
                       if (id && onMoveAppointment) onMoveAppointment(id, dateStr, hour);
                     }}
-                    style={{ height: CELL_H, borderBottom: `1px solid ${B.borderLt}`, borderLeft: `1px solid ${B.borderLt}`, position: "relative", cursor: "pointer" }}
+                    style={{ height: CELL_H, borderBottom: `1px solid ${B.border}`, borderLeft: `1px solid ${B.border}`, position: "relative", cursor: "pointer" }}
                     onMouseEnter={(e) => (e.currentTarget.style.background = B.pinkFaint)}
                     onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
                   >
@@ -713,359 +685,9 @@ const PatientsView = ({ patients, onSelect, onAdd }) => {
 // PATIENT TABS
 // ═══════════════════════════════════════════════════════
 
-const InfoTab = ({ patient, updatePatient }) => {
-  const [f,setF]=useState({...patient});
-  const set=(k,v)=>setF(p=>({...p,[k]:v}));
-  return (
-    <div style={{maxWidth:560}}>
-      <h3 style={{fontFamily:"'Playfair Display',serif",fontSize:18,color:B.dark,marginBottom:18}}>Informações</h3>
-      <Field label="Nome completo" value={f.name} onChange={v=>set('name',v)}/>
-      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12}}>
-        <Field label="E-mail" value={f.email} onChange={v=>set('email',v)} type="email"/>
-        <Field label="Telefone / WhatsApp" value={f.phone} onChange={v=>set('phone',v)}/>
-      </div>
-      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12}}>
-        <Field label="Data de Nascimento" value={f.anamnesis?.birthDate} onChange={v=>set('anamnesis',{...f.anamnesis,birthDate:v})} type="date"/>
-        <Field label="Status" value={f.status} onChange={v=>set('status',v)} type="select"
-          opts={[{value:'lead',label:'Lead'},{value:'active',label:'Ativo'},{value:'inactive',label:'Inativo'}]}/>
-      </div>
-      <Field label="Como nos conheceu" value={f.howFound} onChange={v=>set('howFound',v)}/>
-      <Field label="Notas gerais" value={f.notes} onChange={v=>set('notes',v)} type="textarea"/>
-      <div style={{display:'flex',gap:10,flexWrap:'wrap',alignItems:'center'}}>
-        <Btn onClick={()=>updatePatient(f)}>Salvar</Btn>
-        <Btn variant="secondary" onClick={()=>openPatientFullExportHtml(f)}>Exportar ficha PDF</Btn>
-      </div>
-    </div>
-  );
-};
-
-
-
 // Sessions Tab
-const SessionsTab = ({ patient, appointments, updatePatient }) => {
-  const [note,setNote]=useState(''), [date,setDate]=useState(today()), [type,setType]=useState('Sessão');
-  const [charged,setCharged]=useState(true);
-  const [sessions,setSessions]=useState(patient.sessionLogs||[]);
-  const thisMonth=new Date().toISOString().slice(0,7);
-  const monthSessions=[...sessions,...appointments.filter(a=>a.patientId===patient.id)].filter(s=>((s.date||'').startsWith(thisMonth))).length;
-
-  const addLog=async()=>{
-    if(!note.trim()) return;
-    const s={id:uid(),date,type,notes:note,charged,ts:Date.now()};
-    const updated=[s,...sessions].sort((a,b)=>b.date.localeCompare(a.date));
-    setSessions(updated);
-    setNote('');
-    await updatePatient({...patient,sessionLogs:updated});
-  };
-
-  const calApts=appointments.filter(a=>a.patientId===patient.id).sort((a,b)=>b.date.localeCompare(a.date));
-
-  const getStatusColor=apt=>{
-    if(!apt.status||apt.status==='confirmed') return B.green;
-    return APT_STATUS[apt.status]?.color||B.green;
-  };
-
-  return (
-    <div style={{maxWidth:680}}>
-      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:16}}>
-        <div>
-          <h3 style={{fontFamily:"'Playfair Display',serif",fontSize:18,color:B.dark}}>Histórico de Sessões</h3>
-          <p style={{fontSize:13,color:B.muted,marginTop:2}}>
-            <strong style={{color:B.pink}}>{monthSessions}</strong> sessão(ões) este mês
-          </p>
-        </div>
-        <div style={{background:B.pinkFaint,border:`1.5px solid ${B.pinkLt}`,borderRadius:10,padding:'8px 16px',textAlign:'center'}}>
-          <div style={{fontSize:22,fontWeight:700,color:B.pink}}>{monthSessions}</div>
-          <div style={{fontSize:10,color:B.muted,textTransform:'uppercase',letterSpacing:'0.5px'}}>Sessões/mês</div>
-        </div>
-      </div>
-
-      <div style={{background:B.white,border:`1px solid ${B.border}`,borderRadius:12,padding:18,marginBottom:20}}>
-        <p style={{fontSize:11,fontWeight:700,color:B.muted,textTransform:'uppercase',letterSpacing:'0.5px',marginBottom:12}}>✍️ Registrar Sessão Manual</p>
-        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10,marginBottom:8}}>
-          <Field label="Data" value={date} onChange={setDate} type="date" small/>
-          <Field label="Tipo" value={type} onChange={setType} type="select" opts={['Sessão','Avaliação','Reforço','Experimental']} small/>
-        </div>
-        <div style={{display:'flex',alignItems:'center',gap:16,marginBottom:10}}>
-          <label style={{display:'flex',alignItems:'center',gap:6,cursor:'pointer',fontSize:14,color:B.dark}}>
-            <input type="checkbox" checked={charged} onChange={e=>setCharged(e.target.checked)} style={{accentColor:B.pink,width:16,height:16}}/>
-            Cobrar sessão (R$ {SESSION_PRICE})
-          </label>
-        </div>
-        <Field label="Observações da sessão" value={note} onChange={setNote} type="textarea" rows={3}
-          placeholder="Exercícios realizados, evolução, dificuldades, observações clínicas…"/>
-        <div style={{display:'flex',justifyContent:'flex-end',gap:10}}>
-          <Btn small variant="teal" onClick={addLog} disabled={!note.trim()}>Salvar Sessão</Btn>
-          {sessions.length>0&&<Btn small variant="secondary" onClick={()=>generateReceipt(patient,date,charged?SESSION_PRICE:0,sessions.length)}>
-            <Icon d={IC.receipt} size={14}/>PDF Recibo
-          </Btn>}
-        </div>
-      </div>
-
-      {calApts.length>0&&(
-        <div style={{marginBottom:18}}>
-          <p style={{fontSize:11,fontWeight:700,color:B.muted,textTransform:'uppercase',letterSpacing:'0.5px',marginBottom:8}}>📅 Agendamentos na Agenda</p>
-          {calApts.slice(0,8).map(a=>(
-            <div key={a.id} style={{display:'flex',alignItems:'center',gap:10,padding:'9px 14px',background:B.white,border:`1px solid ${B.border}`,borderRadius:8,marginBottom:5}}>
-              <div style={{width:8,height:8,borderRadius:'50%',background:getStatusColor(a),flexShrink:0}}/>
-              <span style={{fontSize:13,color:B.dark,flex:1}}>{fmtDate(a.date+'T00:00:00')}</span>
-              <Tag color={APT_TYPES[a.type]?.color||B.teal}>{APT_TYPES[a.type]?.label||'Sessão'}</Tag>
-              {a.status&&<Tag color={APT_STATUS[a.status]?.color||B.green}>{APT_STATUS[a.status]?.label}</Tag>}
-              {a.cancelledWithNotice!==undefined&&(
-                <Tag color={a.cancelledWithNotice?B.amber:B.red}>{a.cancelledWithNotice?'c/ aviso':'sem aviso'}</Tag>
-              )}
-              <span style={{fontSize:11,color:B.muted}}>{a.startHour}h</span>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {sessions.length>0&&(
-        <div>
-          <p style={{fontSize:11,fontWeight:700,color:B.muted,textTransform:'uppercase',letterSpacing:'0.5px',marginBottom:8}}>📋 Registros Manuais</p>
-          {sessions.map((s,i)=>(
-            <div key={s.id} style={{background:B.white,border:`1px solid ${B.border}`,borderRadius:10,padding:14,marginBottom:8}}>
-              <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:6}}>
-                <Tag color={B.teal}>{s.type}</Tag>
-                <span style={{fontSize:12,color:B.muted}}>{fmtDate(s.date+'T00:00:00')}</span>
-                {!s.charged&&<Tag color={B.muted}>Não cobrada</Tag>}
-                <div style={{flex:1}}/>
-                <Btn small variant="ghost" onClick={()=>generateReceipt(patient,s.date,SESSION_PRICE,sessions.length-i)}>
-                  <Icon d={IC.receipt} size={13}/>
-                </Btn>
-              </div>
-              <p style={{fontSize:14,color:B.dark,lineHeight:1.6}}>{s.notes}</p>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-};
 
 
-
-// Evaluation Tab
-const EvaluationTab = ({ patient, updatePatient }) => {
-  const [evals,setEvals]=useState(patient.evaluations||[]);
-  const [note,setNote]=useState(''), [busyAI,setBusyAI]=useState(false);
-  const addManual=async()=>{
-    if(!note.trim()) return;
-    const e={id:uid(),date:new Date().toISOString(),type:'manual',content:note};
-    const updated=[e,...evals];
-    setEvals(updated); setNote('');
-    await updatePatient({...patient,evaluations:updated});
-  };
-  const generateAI=async()=>{
-    setBusyAI(true);
-    const an=patient.anamnesis||{};
-    const prompt=`Gere uma avaliação clínica inicial completa para este paciente de Pilates:\n\nPaciente: ${patient.name}\nQueixa: ${an.mainComplaint||'não informada'}\nObjetivos: ${an.goal||'não informados'}\nHistórico médico: ${an.medicalHistory||an.chronicConditions||'não informado'}\nMedicamentos: ${an.medications||'nenhum'}\nCirurgias: ${an.surgeries||'nenhuma'}\nDor: ${an.painHistory||'não informado'}\nContraindicações: ${an.contraindications||an.chronicConditions||'verificar'}\n\nForneça:\n1. Avaliação clínica geral\n2. Pontos de atenção e riscos\n3. Objetivos terapêuticos prioritários\n4. Exercícios de Pilates recomendados para início\n5. Exercícios a EVITAR\n6. Progressão: curto, médio e longo prazo`;
-    const content=await claudeAPI([{role:'user',content:prompt}],'Você é especialista em Pilates e fisioterapia, auxiliando uma professora de Pilates na avaliação de pacientes.');
-    const e={id:uid(),date:new Date().toISOString(),type:'ai',content};
-    const updated=[e,...evals];
-    setEvals(updated);
-    await updatePatient({...patient,evaluations:updated});
-    setBusyAI(false);
-  };
-  return (
-    <div>
-      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:18}}>
-        <h3 style={{fontFamily:"'Playfair Display',serif",fontSize:18,color:B.dark}}>Avaliações</h3>
-        <Btn onClick={generateAI} disabled={busyAI}><Icon d={IC.sparkle} size={15} color={B.white}/>{busyAI?'Gerando…':'Avaliação IA'}</Btn>
-      </div>
-      <div style={{background:B.white,border:`1px solid ${B.border}`,borderRadius:12,padding:18,marginBottom:18}}>
-        <p style={{fontSize:11,fontWeight:700,color:B.muted,textTransform:'uppercase',letterSpacing:'0.5px',marginBottom:10}}>✍️ Anotação Manual</p>
-        <textarea value={note} onChange={e=>setNote(e.target.value)} placeholder="Descrição da sessão, evolução, observações clínicas…"
-          rows={4} style={{width:'100%',padding:'10px 12px',border:`1.5px solid ${B.border}`,borderRadius:8,fontSize:14,color:B.dark,resize:'vertical',outline:'none',lineHeight:1.5}}/>
-        <div style={{display:'flex',justifyContent:'flex-end',marginTop:10}}>
-          <Btn small onClick={addManual}>Salvar</Btn>
-        </div>
-      </div>
-      {evals.length===0?<p style={{textAlign:'center',color:B.muted,padding:40}}>Nenhuma avaliação ainda. Gere com IA ou adicione manualmente.</p>:(
-        <div style={{display:'flex',flexDirection:'column',gap:12}}>
-          {evals.map(ev=>(
-            <div key={ev.id} style={{background:B.white,border:`1px solid ${B.border}`,borderRadius:12,padding:18}}>
-              <div style={{display:'flex',gap:10,marginBottom:12,alignItems:'center'}}>
-                <Tag color={ev.type==='ai'?B.purple:B.teal}>{ev.type==='ai'?'✨ IA':'✍️ Manual'}</Tag>
-                <span style={{fontSize:12,color:B.muted}}>{fmtDate(ev.date)}</span>
-              </div>
-              <div style={{fontSize:14,color:B.dark,lineHeight:1.75,whiteSpace:'pre-wrap'}}>{ev.content}</div>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-};
-
-// Chat Tab
-const ChatTab = ({ patient, updatePatient }) => {
-  const [messages,setMessages]=useState(patient.chatHistory||[]);
-  const [input,setInput]=useState(''), [busy,setBusy]=useState(false);
-  const endRef=useRef();
-  useEffect(()=>{endRef.current?.scrollIntoView({behavior:'smooth'});},[messages]);
-  const send=async()=>{
-    if(!input.trim()||busy) return;
-    const userMsg={role:'user',content:input,ts:Date.now()};
-    const newMsgs=[...messages,userMsg];
-    setMessages(newMsgs); setInput(''); setBusy(true);
-    const an=patient.anamnesis||{};
-    const system=`Você é especialista em Pilates e fisioterapia, auxiliando a professora Lívia.\n\nPaciente atual: ${patient.name}\nQueixa: ${an.mainComplaint||'não informada'}\nHistórico: ${an.chronicConditions||'não informado'}\nMedicamentos: ${an.medications||'nenhum'}\nCirurgias: ${an.surgeries||'nenhuma'}\nDor: ${an.painHistory||'não informado'}\n\nResponda de forma técnica, prática e direta.`;
-    const reply=await claudeAPI(newMsgs.map(m=>({role:m.role,content:m.content})),system);
-    const assistantMsg={role:'assistant',content:reply,ts:Date.now()};
-    const final=[...newMsgs,assistantMsg];
-    setMessages(final); setBusy(false);
-    await updatePatient({...patient,chatHistory:final});
-  };
-  const suggestions=['Quais exercícios para essa queixa?','O que devo evitar?','Como montar a progressão?','Exercícios para fortalecer o core com essa limitação?'];
-  return (
-    <div style={{display:'flex',flexDirection:'column',height:'calc(100vh - 280px)',maxWidth:680}}>
-      <div style={{marginBottom:12}}>
-        <h3 style={{fontFamily:"'Playfair Display',serif",fontSize:18,color:B.dark}}>Consultar Claude sobre {patient.name}</h3>
-        <p style={{fontSize:12,color:B.muted,marginTop:3}}>Pergunte sobre o caso, técnicas, contraindicações, progressão…</p>
-      </div>
-      <div style={{flex:1,overflowY:'auto',display:'flex',flexDirection:'column',gap:10,paddingBottom:8}}>
-        {messages.length===0&&(
-          <div style={{padding:'20px 0'}}>
-            <div style={{textAlign:'center',color:B.muted,marginBottom:16}}>
-              <Icon d={IC.chat} size={36} color={B.border}/>
-              <p style={{fontSize:14,marginTop:10}}>Comece uma consulta sobre este caso</p>
-            </div>
-            <div style={{display:'flex',flexWrap:'wrap',gap:8,justifyContent:'center'}}>
-              {suggestions.map(s=>(
-                <button key={s} onClick={()=>setInput(s)}
-                  style={{background:B.white,border:`1.5px solid ${B.border}`,borderRadius:20,padding:'6px 14px',fontSize:13,color:B.dark,cursor:'pointer'}}>{s}</button>
-              ))}
-            </div>
-          </div>
-        )}
-        {messages.map((m,i)=>(
-          <div key={i} style={{display:'flex',justifyContent:m.role==='user'?'flex-end':'flex-start'}}>
-            <div style={{maxWidth:'86%',padding:'10px 14px',borderRadius:14,background:m.role==='user'?`linear-gradient(135deg,${B.pink},${B.pinkDk})`:B.white,color:m.role==='user'?B.white:B.dark,border:m.role==='assistant'?`1px solid ${B.border}`:'none',fontSize:14,lineHeight:1.7,whiteSpace:'pre-wrap',borderBottomRightRadius:m.role==='user'?4:14,borderBottomLeftRadius:m.role==='assistant'?4:14}}>
-              {m.content}
-            </div>
-          </div>
-        ))}
-        {busy&&<div style={{display:'flex',justifyContent:'flex-start'}}>
-          <div style={{background:B.white,border:`1px solid ${B.border}`,borderRadius:14,padding:'10px 14px',color:B.muted,fontSize:14,borderBottomLeftRadius:4}}>✦ Pensando…</div>
-        </div>}
-        <div ref={endRef}/>
-      </div>
-      <div style={{display:'flex',gap:8,paddingTop:10,borderTop:`1px solid ${B.border}`}}>
-        <input value={input} onChange={e=>setInput(e.target.value)}
-          onKeyDown={e=>e.key==='Enter'&&!e.shiftKey&&(e.preventDefault(),send())}
-          placeholder="Ex: A tíbia inferior está machucada, o que devo evitar?"
-          style={{flex:1,padding:'11px 14px',border:`1.5px solid ${B.border}`,borderRadius:10,fontSize:14,color:B.dark,outline:'none',background:B.white}}/>
-        <button onClick={send} disabled={busy||!input.trim()}
-          style={{background:`linear-gradient(135deg,${B.pink},${B.pinkDk})`,border:'none',borderRadius:10,padding:'11px 16px',cursor:'pointer',opacity:busy||!input.trim()?0.5:1}}>
-          <Icon d={IC.send} size={17} color={B.white}/>
-        </button>
-      </div>
-    </div>
-  );
-};
-
-// Financial Tab (per patient)
-const FinancialTab = ({ patient, updatePatient }) => {
-  const [fin,setFin]=useState(patient.financial||{payType:'per_session',monthlyValue:0,payments:[]});
-  const [payDate,setPayDate]=useState(today());
-  const [payAmount,setPayAmount]=useState(String(SESSION_PRICE));
-  const [payMethod,setPayMethod]=useState('Pix');
-  const [payNote,setPayNote]=useState('');
-  const thisMonth=new Date().toISOString().slice(0,7);
-
-  const saveFin=async(updated)=>{setFin(updated);await updatePatient({...patient,financial:updated});};
-
-  const addPayment=async()=>{
-    if(!payAmount) return;
-    const p={id:uid(),date:payDate,amount:parseFloat(payAmount),method:payMethod,note:payNote};
-    await saveFin({...fin,payments:[p,...(fin.payments||[])]});
-    setPayAmount(String(SESSION_PRICE)); setPayNote('');
-  };
-
-  const removePayment=async(id)=>saveFin({...fin,payments:fin.payments.filter(p=>p.id!==id)});
-
-  const monthPays=(fin.payments||[]).filter(p=>p.date?.startsWith(thisMonth));
-  const totalMonth=monthPays.reduce((s,p)=>s+p.amount,0);
-  const totalAll=(fin.payments||[]).reduce((s,p)=>s+p.amount,0);
-
-  // Session count this month from calendar
-  const METHODCOLOR={'Pix':B.green,'Dinheiro':B.amber,'Transferência':B.teal};
-
-  return (
-    <div style={{maxWidth:580}}>
-      <h3 style={{fontFamily:"'Playfair Display',serif",fontSize:18,color:B.dark,marginBottom:18}}>Financeiro</h3>
-
-      {/* Summary */}
-      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12,marginBottom:20}}>
-        <div style={{background:B.greenLt,border:`1px solid #A7F3D0`,borderRadius:12,padding:'14px 16px',textAlign:'center'}}>
-          <div style={{fontSize:22,fontWeight:700,color:B.green}}>{fmtCurrency(totalMonth)}</div>
-          <div style={{fontSize:11,color:B.muted,marginTop:3}}>Recebido este mês</div>
-        </div>
-        <div style={{background:B.pinkFaint,border:`1px solid ${B.pinkLt}`,borderRadius:12,padding:'14px 16px',textAlign:'center'}}>
-          <div style={{fontSize:22,fontWeight:700,color:B.pink}}>{fmtCurrency(totalAll)}</div>
-          <div style={{fontSize:11,color:B.muted,marginTop:3}}>Total histórico</div>
-        </div>
-      </div>
-
-      {/* Payment type */}
-      <div style={{background:B.white,border:`1px solid ${B.border}`,borderRadius:12,padding:16,marginBottom:16}}>
-        <p style={{fontSize:11,fontWeight:700,color:B.muted,textTransform:'uppercase',letterSpacing:'0.5px',marginBottom:12}}>Modalidade de Pagamento</p>
-        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8}}>
-          {Object.entries(PAY_TYPES).map(([k,v])=>(
-            <div key={k} onClick={()=>saveFin({...fin,payType:k})}
-              style={{padding:'10px 14px',borderRadius:10,border:`2px solid ${fin.payType===k?B.pink:B.border}`,background:fin.payType===k?B.pinkFaint:B.white,cursor:'pointer',textAlign:'center'}}>
-              <div style={{fontSize:13,fontWeight:600,color:fin.payType===k?B.pinkDk:B.dark}}>{v.label}</div>
-              {k==='per_session'&&<div style={{fontSize:12,color:B.muted,marginTop:2}}>R$ {SESSION_PRICE}/sessão</div>}
-            </div>
-          ))}
-        </div>
-        {fin.payType!=='per_session'&&(
-          <div style={{marginTop:12}}>
-            <Field label="Valor mensal (R$)" value={fin.monthlyValue} onChange={v=>saveFin({...fin,monthlyValue:parseFloat(v)||0})} type="number"/>
-          </div>
-        )}
-      </div>
-
-      {/* Register payment */}
-      <div style={{background:B.white,border:`1px solid ${B.border}`,borderRadius:12,padding:16,marginBottom:16}}>
-        <p style={{fontSize:11,fontWeight:700,color:B.muted,textTransform:'uppercase',letterSpacing:'0.5px',marginBottom:12}}>💰 Registrar Pagamento</p>
-        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:10,marginBottom:8}}>
-          <Field label="Data" value={payDate} onChange={setPayDate} type="date" small/>
-          <Field label="Valor (R$)" value={payAmount} onChange={setPayAmount} type="number" small/>
-          <Field label="Forma" value={payMethod} onChange={setPayMethod} type="select" opts={PAY_METHODS} small/>
-        </div>
-        <Field label="Referência (opcional)" value={payNote} onChange={setPayNote} placeholder="Ex: Março/2026" small/>
-        <div style={{display:'flex',justifyContent:'flex-end',gap:8}}>
-          <Btn small variant="secondary" onClick={()=>generateReceipt(patient,payDate,parseFloat(payAmount)||SESSION_PRICE)}>
-            <Icon d={IC.receipt} size={13}/>Recibo PDF
-          </Btn>
-          <Btn small onClick={addPayment} disabled={!payAmount}>Registrar</Btn>
-        </div>
-      </div>
-
-      {/* History */}
-      {(fin.payments||[]).length>0&&(
-        <div>
-          <p style={{fontSize:11,fontWeight:700,color:B.muted,textTransform:'uppercase',letterSpacing:'0.5px',marginBottom:8}}>Histórico</p>
-          {(fin.payments||[]).map(p=>(
-            <div key={p.id} style={{display:'flex',alignItems:'center',gap:10,padding:'10px 14px',background:B.white,border:`1px solid ${B.border}`,borderRadius:8,marginBottom:6}}>
-              <div style={{flex:1}}>
-                <div style={{fontSize:14,fontWeight:600,color:B.dark}}>{fmtCurrency(p.amount)}</div>
-                {p.note&&<div style={{fontSize:12,color:B.muted}}>{p.note}</div>}
-              </div>
-              <div style={{fontSize:12,color:B.muted}}>{fmtDate(p.date+'T00:00:00')}</div>
-              <Tag color={METHODCOLOR[p.method]||B.muted}>{p.method}</Tag>
-              <button onClick={()=>removePayment(p.id)} style={{background:'none',border:'none',cursor:'pointer',color:B.mutedLt,padding:4}}>
-                <Icon d={IC.trash} size={13}/>
-              </button>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-};
 
 // ═══════════════════════════════════════════════════════
 // PATIENT DETAIL WRAPPER
@@ -1709,15 +1331,17 @@ export default function PilatesApp() {
     setFontScale(parseFloat(localStorage.getItem("pilates_font_scale") || "1") || 1);
   }, []);
 
+  const visiblePatients = useMemo(() => patients.filter((p) => !p.deleted), [patients]);
+
   const overdueNames = useMemo(
-    () => patients.filter((p) => isOverdue30Days(p)).map((p) => p.name),
-    [patients]
+    () => visiblePatients.filter((p) => isOverdue30Days(p)).map((p) => p.name),
+    [visiblePatients]
   );
 
   const searchResults = useMemo(() => {
     const q = searchQ.trim().toLowerCase();
     if (!q) return { patients: [], appointments: [] };
-    const pMatch = patients.filter(
+    const pMatch = visiblePatients.filter(
       (p) =>
         p.name?.toLowerCase().includes(q) ||
         p.phone?.includes(q) ||
@@ -1725,12 +1349,12 @@ export default function PilatesApp() {
     );
     const aMatch = appointments.filter((a) => {
       const ds = (a.date || "").toLowerCase();
-      const pt = patients.find((x) => x.id === a.patientId);
+      const pt = visiblePatients.find((x) => x.id === a.patientId);
       const pn = pt?.name?.toLowerCase() || "";
       return ds.includes(q) || pn.includes(q) || String(a.startHour).includes(q);
     });
     return { patients: pMatch.slice(0, 12), appointments: aMatch.slice(0, 12) };
-  }, [searchQ, patients, appointments]);
+  }, [searchQ, visiblePatients, appointments]);
 
   const pushToCloud = useCallback(
     async (key, val, okMsg) => {
@@ -1861,9 +1485,16 @@ export default function PilatesApp() {
   }, [showToast]);
 
   const savePatients = async (pts) => {
-    setPatients(pts);
-    writeCache("pilates_patients", pts);
-    await pushToCloud("pilates_patients", pts, "Pacientes atualizados.");
+    try {
+      const merged = await mergeDB("pilates_patients", pts);
+      setPatients(merged);
+      writeCache("pilates_patients", merged);
+      await pushToCloud("pilates_patients", merged, "Pacientes atualizados.");
+    } catch {
+      setPatients(pts);
+      writeCache("pilates_patients", pts);
+      await pushToCloud("pilates_patients", pts, "Pacientes atualizados.");
+    }
   };
   const saveAppointments = async (apts) => {
     setAppointments(apts);
@@ -2058,7 +1689,7 @@ export default function PilatesApp() {
         {view === "calendar" && (
           <CalendarView
             appointments={appointments}
-            patients={patients}
+            patients={visiblePatients}
             currentDate={currentDate}
             setCurrentDate={setCurrentDate}
             onSlotClick={(date, hour) => setModal({ type: "add-appointment", date, hour })}
@@ -2071,7 +1702,7 @@ export default function PilatesApp() {
         )}
         {view === "patients" && (
           <PatientsView
-            patients={patients}
+            patients={visiblePatients}
             onSelect={(p) => {
               setSelectedPatient(p);
               setView("patient");
@@ -2087,16 +1718,16 @@ export default function PilatesApp() {
             onBack={() => navTo("patients")}
           />
         )}
-        {view === "financial" && <FinancialView patients={patients} appointments={appointments} />}
-        {view === "costs" && <CostsView costs={costs} setCosts={setCosts} patients={patients} />}
-        {view === "reports" && <ReportsView patients={patients} appointments={appointments} costs={costs} />}
+        {view === "financial" && <FinancialView patients={visiblePatients} appointments={appointments} />}
+        {view === "costs" && <CostsView costs={costs} setCosts={setCosts} patients={visiblePatients} />}
+        {view === "reports" && <ReportsView patients={visiblePatients} appointments={appointments} costs={costs} />}
         {view === "reminders" && <RemindersView reminders={reminders} setReminders={setReminders} />}
       </div>
 
       {modal && (
         <Modal
           modal={modal}
-          patients={patients}
+          patients={visiblePatients}
           appointments={appointments}
           onClose={() => setModal(null)}
           savePatients={savePatients}
@@ -2188,7 +1819,7 @@ export default function PilatesApp() {
                 <p style={{ fontSize: 11, fontWeight: 700, color: B.muted, margin: "12px 0 8px" }}>AGENDA</p>
               )}
               {searchResults.appointments.map((a) => {
-                const pt = patients.find((x) => x.id === a.patientId);
+                const pt = visiblePatients.find((x) => x.id === a.patientId);
                 return (
                   <button
                     key={a.id}
