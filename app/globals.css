@@ -9,36 +9,36 @@
 }
 
 :root {
-  --pilates-bg: #f3f6ec;
-  --pilates-fg: #1f2417;
-  --pilates-surface: #ffffff;
+  --pilates-bg: #a6ad97;
+  --pilates-fg: #232b19;
+  --pilates-surface: #f7f8f2;
   --pilates-pink: #63783f;
   --pilates-pink-dk: #4e5e31;
   --pilates-pink-lt: #c7d6b1;
   --pilates-pink-faint: #eaf2e1;
   --pilates-teal: #7fa552;
-  --pilates-teal-dk: #5c7b36;
-  --pilates-teal-lt: #cadab4;
-  --pilates-teal-faint: #edf3e4;
-  --pilates-cream: #f3f6ec;
-  --pilates-cream-dk: #e3e9d7;
-  --pilates-cream-md: #e9efdf;
-  --pilates-muted: #6e7a60;
-  --pilates-muted-lt: #9aa890;
-  --pilates-border: #c7ccb8;
-  --pilates-border-lt: #dde4d2;
+  --pilates-teal-dk: #5e7e3e;
+  --pilates-teal-lt: #b9cea0;
+  --pilates-teal-faint: #eef5e7;
+  --pilates-cream: #a6ad97;
+  --pilates-cream-dk: #8d957c;
+  --pilates-cream-md: #99a189;
+  --pilates-muted: #4a543c;
+  --pilates-muted-lt: #6d7860;
+  --pilates-border: #878f74;
+  --pilates-border-lt: #b6bda6;
   --pilates-green: #5e8a3a;
-  --pilates-green-lt: #dcefc9;
+  --pilates-green-lt: #dff2d8;
   --pilates-amber: #d97706;
   --pilates-amber-lt: #fef3c7;
   --pilates-red: #dc2626;
   --pilates-red-lt: #fee2e2;
   --pilates-purple: #7c3aed;
   --pilates-purple-lt: #ede9fe;
-  --pilates-gray: #6b7280;
-  --pilates-gray-lt: #f3f4f6;
+  --pilates-gray: #5f6950;
+  --pilates-gray-lt: #e6eadd;
   --pilates-gold: #b45309;
-  --pilates-sidebar: #1e2a1c;
+  --pilates-sidebar: #7d8768;
 }
 
 html {
@@ -58,41 +58,50 @@ body {
 
 html[data-theme="dark"] {
   color-scheme: dark;
-  --pilates-bg: #12160e;
-  --pilates-fg: #eef2e6;
-  --pilates-surface: #1c2118;
-  --pilates-pink: #8fb15e;
-  --pilates-pink-dk: #63783f;
-  --pilates-pink-lt: #2f3a22;
-  --pilates-pink-faint: #1e2616;
-  --pilates-teal: #9ec97a;
-  --pilates-teal-dk: #5c7b36;
-  --pilates-teal-lt: #2a3a1e;
-  --pilates-teal-faint: #18220f;
-  --pilates-cream: #12160e;
-  --pilates-cream-dk: #1a2014;
-  --pilates-cream-md: #161c10;
-  --pilates-muted: #a7b29a;
-  --pilates-muted-lt: #c2c9b8;
-  --pilates-border: #3a4430;
-  --pilates-border-lt: #242c1c;
-  --pilates-green: #7cc24f;
-  --pilates-green-lt: #20351a;
-  --pilates-amber: #fbbf24;
-  --pilates-amber-lt: #422006;
-  --pilates-red: #f87171;
-  --pilates-red-lt: #450a0a;
-  --pilates-purple: #a78bfa;
-  --pilates-purple-lt: #2e1065;
-  --pilates-gray: #9ca3af;
-  --pilates-gray-lt: #1f261a;
-  --pilates-gold: #fcd34d;
-  --pilates-sidebar: #141a10;
+  --pilates-bg: #7d8768;
+  --pilates-fg: #121809;
+  --pilates-surface: #8b947b;
+  --pilates-pink: #44522a;
+  --pilates-pink-dk: #36421f;
+  --pilates-pink-lt: #a8b38e;
+  --pilates-pink-faint: #97a17e;
+  --pilates-teal: #324a18;
+  --pilates-teal-dk: #273a12;
+  --pilates-teal-lt: #9caa7f;
+  --pilates-teal-faint: #939e79;
+  --pilates-cream: #7d8768;
+  --pilates-cream-dk: #6b755a;
+  --pilates-cream-md: #747e62;
+  --pilates-muted: #2c3520;
+  --pilates-muted-lt: #424d31;
+  --pilates-border: #646e52;
+  --pilates-border-lt: #707a5e;
+  --pilates-green: #2f5018;
+  --pilates-green-lt: #9eb184;
+  --pilates-amber: #7a4f06;
+  --pilates-amber-lt: #cdbb8a;
+  --pilates-red: #971f1f;
+  --pilates-red-lt: #c9a39b;
+  --pilates-purple: #4c2a8f;
+  --pilates-purple-lt: #b3a8c9;
+  --pilates-gray: #38412a;
+  --pilates-gray-lt: #939d7e;
+  --pilates-gold: #7c4a06;
+  --pilates-sidebar: #414b2c;
 }
 
 html[data-theme="dark"] body {
   background: var(--pilates-bg);
   color: var(--pilates-fg);
+}
+
+body {
+  background-image: url("/textures/cotton-light.svg");
+  background-repeat: repeat;
+}
+
+html[data-theme="dark"] body {
+  background-image: url("/textures/cotton-dark.svg");
 }
 
 .pilates-scroll {

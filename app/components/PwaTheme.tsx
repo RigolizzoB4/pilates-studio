@@ -32,7 +32,7 @@ export function PwaTheme() {
   useEffect(() => {
     if (typeof window === "undefined") return;
     if (window.matchMedia("(display-mode: standalone)").matches) {
-      document.body.style.backgroundColor = "var(--pilates-bg, #FAF8F6)";
+      document.body.style.backgroundColor = "var(--pilates-bg, #a6ad97)";
     }
   }, []);
 

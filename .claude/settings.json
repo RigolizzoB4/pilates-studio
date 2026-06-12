@@ -1,4 +1,14 @@
 {
+  "permissions": {
+    "defaultMode": "acceptEdits",
+    "allow": [
+      "Read", "Glob", "Grep",
+      "Bash(git status:*)", "Bash(git diff:*)", "Bash(git log:*)",
+      "Bash(ls:*)", "Bash(dir:*)", "Bash(Get-ChildItem:*)",
+      "Bash(Get-Content:*)", "Bash(Select-String:*)",
+      "Bash(grep:*)", "Bash(cat:*)", "Bash(rg:*)"
+    ]
+  },
   "hooks": {
     "PreToolUse": [
       {
