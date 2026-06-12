@@ -4,7 +4,7 @@
   "description": "Gestão completa do Studio de Pilates",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#a6ad97",
+  "background_color": "#e8e0cb",
   "theme_color": "#7d8768",
   "orientation": "any",
   "screenshots": [

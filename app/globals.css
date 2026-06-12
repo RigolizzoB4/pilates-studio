@@ -9,9 +9,9 @@
 }
 
 :root {
-  --pilates-bg: #a6ad97;
-  --pilates-fg: #232b19;
-  --pilates-surface: #f7f8f2;
+  --pilates-bg: #e8e0cb;
+  --pilates-fg: #2a2b1e;
+  --pilates-surface: #faf7ee;
   --pilates-pink: #63783f;
   --pilates-pink-dk: #4e5e31;
   --pilates-pink-lt: #c7d6b1;
@@ -20,13 +20,13 @@
   --pilates-teal-dk: #5e7e3e;
   --pilates-teal-lt: #b9cea0;
   --pilates-teal-faint: #eef5e7;
-  --pilates-cream: #a6ad97;
-  --pilates-cream-dk: #8d957c;
-  --pilates-cream-md: #99a189;
-  --pilates-muted: #4a543c;
-  --pilates-muted-lt: #6d7860;
-  --pilates-border: #878f74;
-  --pilates-border-lt: #b6bda6;
+  --pilates-cream: #e8e0cb;
+  --pilates-cream-dk: #d3c9ad;
+  --pilates-cream-md: #ded5bc;
+  --pilates-muted: #5c5a45;
+  --pilates-muted-lt: #837f66;
+  --pilates-border: #c6bda2;
+  --pilates-border-lt: #d9d1b9;
   --pilates-green: #5e8a3a;
   --pilates-green-lt: #dff2d8;
   --pilates-amber: #d97706;
@@ -36,7 +36,7 @@
   --pilates-purple: #7c3aed;
   --pilates-purple-lt: #ede9fe;
   --pilates-gray: #5f6950;
-  --pilates-gray-lt: #e6eadd;
+  --pilates-gray-lt: #e9e4d4;
   --pilates-gold: #b45309;
   --pilates-sidebar: #7d8768;
 }
