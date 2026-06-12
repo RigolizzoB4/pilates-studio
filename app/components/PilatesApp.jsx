@@ -136,21 +136,22 @@ const Sidebar = ({ view, setView, onAdd, onSearch, onSettings }) => {
       </div>
       {nav.map(n=>(
         <button key={n.id} title={n.title} onClick={()=>setView(n.id)}
-          style={{width:48,height:48,borderRadius:12,border:'none',cursor:'pointer',transition:'all 0.15s',display:'flex',alignItems:'center',justifyContent:'center',background:view===n.id?B.pink:'transparent',color:view===n.id?B.white:B.mutedLt}}>
+          className={view===n.id?'pilates-rail-btn is-active':'pilates-rail-btn'}
+          style={{width:48,height:48,borderRadius:12,border:'none',cursor:'pointer',transition:'all 0.15s',display:'flex',alignItems:'center',justifyContent:'center',background:view===n.id?B.pink:'transparent',color:view===n.id?B.white:B.pinkLt,boxShadow:view===n.id?`0 0 0 1.5px ${mixAlpha(B.pinkLt, 60)}`:'none'}}>
           <Icon d={IC[n.icon]} size={22}/>
         </button>
       ))}
       <div style={{flex:1}}/>
-      <button type="button" title="Busca global" onClick={onSearch}
-        style={{width:48,height:48,borderRadius:12,border:'none',cursor:'pointer',background:'transparent',color:B.mutedLt,display:'flex',alignItems:'center',justifyContent:'center'}}>
+      <button type="button" title="Busca global" onClick={onSearch} className="pilates-rail-btn"
+        style={{width:48,height:48,borderRadius:12,border:'none',cursor:'pointer',background:'transparent',color:B.pinkLt,display:'flex',alignItems:'center',justifyContent:'center'}}>
         <Icon d={IC.search} size={22}/>
       </button>
-      <button type="button" title="Aparência e acessibilidade" onClick={onSettings}
-        style={{width:48,height:48,borderRadius:12,border:'none',cursor:'pointer',background:'transparent',color:B.mutedLt,display:'flex',alignItems:'center',justifyContent:'center',fontSize:20}}>
+      <button type="button" title="Aparência e acessibilidade" onClick={onSettings} className="pilates-rail-btn"
+        style={{width:48,height:48,borderRadius:12,border:'none',cursor:'pointer',background:'transparent',color:B.pinkLt,display:'flex',alignItems:'center',justifyContent:'center',fontSize:20}}>
         ⚙
       </button>
       <button type="button" title="Novo Paciente" onClick={onAdd}
-        style={{width:48,height:48,borderRadius:12,border:'none',cursor:'pointer',background:mixAlpha(B.teal, 20),color:B.teal,display:'flex',alignItems:'center',justifyContent:'center'}}>
+        style={{width:48,height:48,borderRadius:12,border:'none',cursor:'pointer',background:mixAlpha(B.teal, 24),color:B.tealLt,display:'flex',alignItems:'center',justifyContent:'center'}}>
         <Icon d={IC.plus} size={22}/>
       </button>
     </aside>
@@ -253,6 +254,10 @@ const CalendarView = memo(({ appointments, patients, currentDate, setCurrentDate
           style={{
             padding: "14px 22px",
             background: B.white,
+            backgroundImage: "url('/art/eucalyptus.svg')",
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "right -14px center",
+            backgroundSize: "auto 130%",
             borderBottom: `1px solid ${B.border}`,
             display: "flex",
             alignItems: "center",
@@ -472,7 +477,7 @@ const CalendarView = memo(({ appointments, patients, currentDate, setCurrentDate
         </div>
       )}
 
-      <div style={{ padding: "16px 22px", background: B.white, borderBottom: `1px solid ${B.border}`, display: "flex", alignItems: "center", gap: 10, flexShrink: 0, flexWrap: "wrap" }}>
+      <div style={{ padding: "16px 22px", background: B.white, backgroundImage: "url('/art/eucalyptus.svg')", backgroundRepeat: "no-repeat", backgroundPosition: "right -14px center", backgroundSize: "auto 130%", borderBottom: `1px solid ${B.border}`, display: "flex", alignItems: "center", gap: 10, flexShrink: 0, flexWrap: "wrap" }}>
         <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: 21, fontWeight: 600, color: B.dark, flex: 1, textTransform: "capitalize" }}>{fmtMonth(currentDate)}</h1>
         <div style={{ display: "flex", gap: 6 }}>
           <button type="button" onClick={() => setCalendarMode("week")} style={{ padding: "8px 14px", minHeight: 44, borderRadius: 8, border: `2px solid ${B.pink}`, background: B.pinkFaint, fontWeight: 600, cursor: "pointer" }}>
@@ -1598,6 +1603,9 @@ export default function PilatesApp() {
         ::-webkit-scrollbar-thumb{background:${B.pinkLt};border-radius:4px;}
         input:focus,textarea:focus,select:focus{border-color:${B.pink}!important;box-shadow:0 0 0 3px ${B.pinkLt}55!important;}
         button:active{transform:scale(0.97);}
+        h1,h2,h3{letter-spacing:0.02em;}
+        .pilates-rail-btn:not(.is-active):hover{background:${mixAlpha(B.pinkLt, 18)}!important;color:${B.white}!important;}
+        .pilates-rail-btn.is-active:hover{filter:brightness(1.08);}
       `}</style>
 
       {!online && (
